@@ -1,0 +1,71 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+}
+
+html,
+body {
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  --simpsons-yellow: #fed439;
+  --simpsons-blue: #71d0f5;
+  font-family: 'Roboto', sans-serif;
+}
+
+body {
+  background-color: var(--simpsons-blue);
+}
+
+@keyframes flash-red {
+  0% {
+    background-color: transparent;
+    border-color: black;
+  }
+
+  30% {
+    background-color: rgb(252, 68, 68);
+    border-color: red;
+  }
+
+  100% {
+    background-color: rgb(252, 108, 108);
+    border-color: black;
+  }
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(1px);
+  }
+  20% {
+    transform: translateX(-1px);
+  }
+  40% {
+    transform: translateX(1px);
+  }
+  60% {
+    transform: translateX(-1px);
+  }
+  80% {
+    transform: translateX(1px);
+  }
+  100% {
+    transform: translateX(-1px);
+  }
+}
+
+@keyframes img-flash-red {
+  0%,
+  20%,
+  70% {
+    background-color: rgba(255, 0, 0, 0.4);
+  }
+  45%,
+  100% {
+    background-color: transparent;
+  }
+}
