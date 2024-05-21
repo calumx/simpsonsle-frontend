@@ -11,7 +11,9 @@ export const GameStateProvider = ({ children }) => {
   useEffect(() => {
     const GameStateObj = { ...localStorage };
     for (let key in GameStateObj) {
-      const camelKey = key.replace(/_([a-z])/g, (_, letter) => letter.toUpperCase());
+      if (!key.startsWith('simpsonsle_')) continue;
+      const keyWithoutPrefix = key.replace('simpsonsle_', '');
+      const camelKey = keyWithoutPrefix.replace(/_([a-z])/g, (_, letter) => letter.toUpperCase());
       setGameData((prev) => {
         return { ...prev, [camelKey]: JSON.parse(GameStateObj[key]) };
       });
@@ -22,7 +24,8 @@ export const GameStateProvider = ({ children }) => {
   const updateGameData = useCallback((newData) => {
     for (let key in newData) {
       const snakeKey = key.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
-      localStorage.setItem(snakeKey, JSON.stringify(newData[key]));
+      const prefix = 'simpsonsle_';
+      localStorage.setItem(prefix + snakeKey, JSON.stringify(newData[key]));
       setGameData((prev) => {
         return { ...prev, ...newData };
       });
