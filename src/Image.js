@@ -1,27 +1,36 @@
 import { Box } from '@mui/material';
 import { useGameState } from './context/GameStateContext';
 import { useGuess } from './context/GuessContext';
+import { useEffect } from 'react';
 
-export const Image = ({ guessListShowing }) => {
+export const TodaysImage = ({ guessListShowing, setLoading }) => {
   const { wrongGuessAnimationRunning } = useGuess();
   const shouldAnimate = !guessListShowing && wrongGuessAnimationRunning;
   const {
     gameData: { todaysEpisode, dayCompleted, guessesToday },
   } = useGameState();
 
+  const imgSrc = todaysEpisode ? `https://image.tmdb.org/t/p/original${todaysEpisode.still_path}` : null;
+
+  useEffect(() => {
+    if (!imgSrc) return;
+
+    const loadImg = () => {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.src = imgSrc;
+        img.onload = resolve;
+      });
+    };
+
+    loadImg().then(() => setLoading(false));
+  }, [imgSrc, setLoading]);
+
   return (
     <Box sx={{ ...containerStyles, animation: shouldAnimate ? 'shake 0.5s' : null }}>
       {shouldAnimate && <ErrorOverlay />}
       {!dayCompleted && <ImgHider numberOfGuesses={guessesToday?.length} />}
-      {todaysEpisode && (
-        <img
-          src={`https://image.tmdb.org/t/p/original${todaysEpisode.still_path}?t=${Date.now()}`}
-          alt="today's episode"
-          width='100%'
-          height='auto'
-          style={{ display: 'block' }}
-        />
-      )}
+      {todaysEpisode && <img src={imgSrc} alt="today's episode" width='100%' height='auto' style={{ display: 'block' }} />}
     </Box>
   );
 };
